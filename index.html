@@ -1,0 +1,119 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Location Test</title>
+<link rel="manifest" href="manifest.webmanifest">
+<meta name="theme-color" content="#6B8E4E">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Location Test">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,700;9..144,900&family=Nunito:wght@600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{--paper:#FBF7EF;--ink:#2E3A2E;--leaf:#6B8E4E;--berry:#C0473B;--line:#E3DCC9}
+  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+  html,body{margin:0;min-height:100%;background:var(--paper);color:var(--ink);
+    font-family:"Nunito",system-ui,sans-serif}
+  body{display:flex;flex-direction:column;align-items:center;justify-content:center;
+    min-height:100dvh;gap:1.1rem;padding:1.5rem
+      calc(1.5rem + env(safe-area-inset-right)) calc(1.5rem + env(safe-area-inset-bottom)) calc(1.5rem + env(safe-area-inset-left));text-align:center}
+  h1{margin:0;font-family:"Fraunces",serif;font-weight:900;font-size:1.7rem}
+  .target{font-size:.8rem;opacity:.7;line-height:1.4;max-width:22rem}
+  .target b{font-variant-numeric:tabular-nums}
+  button{font:800 1.15rem "Nunito";color:var(--paper);background:var(--leaf);border:none;
+    border-radius:16px;padding:1.1rem 1.6rem;cursor:pointer;width:100%;max-width:22rem}
+  button:active{transform:scale(.98)}
+  button:disabled{opacity:.6}
+  .result{width:100%;max-width:22rem;min-height:8rem;background:#fff;border:1.5px solid var(--line);
+    border-radius:16px;padding:1.2rem;display:flex;flex-direction:column;gap:.5rem;justify-content:center}
+  .verdict{font-family:"Fraunces",serif;font-weight:900;font-size:1.5rem;line-height:1.1}
+  .verdict.yes{color:var(--leaf)} .verdict.no{color:var(--berry)} .verdict.warn{color:#B7791F}
+  .dist{font-size:2.6rem;font-weight:800;font-variant-numeric:tabular-nums;line-height:1}
+  .dist small{font-size:1rem;font-weight:700;opacity:.6}
+  .meta{font-size:.82rem;opacity:.78;line-height:1.5;font-variant-numeric:tabular-nums}
+  .note{font-size:.8rem;color:#B7791F;font-weight:700;line-height:1.4}
+  .muted{opacity:.55}
+</style>
+</head>
+<body>
+  <h1>Location Test</h1>
+  <div class="target">Target: <b>39&deg;02'13.3"N 94&deg;34'29.8"W</b><br>(39.036028, &minus;94.574944) &middot; within 10 m?</div>
+
+  <button id="checkBtn">Check my location</button>
+
+  <div class="result" id="result">
+    <div class="meta muted">Press the button to take a reading.</div>
+  </div>
+
+<script>
+  const TARGET_LAT = 39.0360278;
+  const TARGET_LON = -94.5749444;
+  const RADIUS = 10; // meters
+
+  const btn = document.getElementById('checkBtn');
+  const result = document.getElementById('result');
+
+  function haversine(lat1, lon1, lat2, lon2){
+    const R = 6371000, rad = d => d * Math.PI / 180;
+    const dLat = rad(lat2 - lat1), dLon = rad(lon2 - lon1);
+    const a = Math.sin(dLat/2)**2 + Math.cos(rad(lat1))*Math.cos(rad(lat2))*Math.sin(dLon/2)**2;
+    return 2 * R * Math.asin(Math.sqrt(a));
+  }
+  const fmt = m => m < 100 ? m.toFixed(1) : Math.round(m).toString();
+
+  function show(html){ result.innerHTML = html; }
+
+  btn.addEventListener('click', () => {
+    if(!('geolocation' in navigator)){
+      show('<div class="verdict no">No geolocation</div><div class="meta">This browser can\'t provide location.</div>');
+      return;
+    }
+    btn.disabled = true;
+    show('<div class="meta muted">Locating&hellip; (point at open sky for the best fix)</div>');
+    navigator.geolocation.getCurrentPosition(pos => {
+      btn.disabled = false;
+      const { latitude, longitude, accuracy } = pos.coords;
+      const dist = haversine(latitude, longitude, TARGET_LAT, TARGET_LON);
+      const inside = dist <= RADIUS;
+      // If the GPS error bar is bigger than the radius, a yes/no isn't trustworthy.
+      const fuzzy = accuracy > RADIUS;
+
+      let verdict;
+      if (inside && !fuzzy) verdict = '<div class="verdict yes">Within 10 m &check;</div>';
+      else if (inside && fuzzy) verdict = '<div class="verdict warn">Maybe &mdash; reads inside, but fix is fuzzy</div>';
+      else verdict = '<div class="verdict no">Not within 10 m</div>';
+
+      const note = fuzzy
+        ? '<div class="note">GPS accuracy is &plusmn;' + Math.round(accuracy) +
+          ' m, larger than the 10 m target, so this result isn\'t reliable yet. Move to open sky and try again.</div>'
+        : '';
+
+      show(
+        verdict +
+        '<div class="dist">' + fmt(dist) + '<small> m away</small></div>' +
+        note +
+        '<div class="meta">GPS accuracy: &plusmn;' + Math.round(accuracy) + ' m<br>' +
+        'You: ' + latitude.toFixed(6) + ', ' + longitude.toFixed(6) + '<br>' +
+        'Time: ' + new Date().toLocaleTimeString() + '</div>'
+      );
+    }, err => {
+      btn.disabled = false;
+      const msgs = {
+        1: 'Permission denied. Allow location for Safari in Settings &rarr; Privacy &amp; Security &rarr; Location Services, and for this site.',
+        2: 'Position unavailable right now. Try again, ideally outdoors.',
+        3: 'Timed out getting a fix. Try again in the open.'
+      };
+      show('<div class="verdict no">No reading</div><div class="meta">' + (msgs[err.code] || err.message) + '</div>');
+    }, { enableHighAccuracy: true, timeout: 12000, maximumAge: 0 });
+  });
+
+  if ('serviceWorker' in navigator){
+    try { navigator.serviceWorker.register('sw.js'); } catch(e){}
+  }
+</script>
+</body>
+</html>
