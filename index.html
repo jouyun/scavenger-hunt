@@ -38,6 +38,9 @@
   .dist{font-size:1rem;font-weight:800;min-height:1.3rem;color:var(--ink)}
   .dist .warn{color:#B7791F}
   .heart{font-size:1.6rem}
+  .keys{display:flex;flex-wrap:wrap;gap:.5rem;justify-content:center;margin:.5rem 0 .7rem}
+  .keyword{font-family:"Fraunces",serif;font-weight:900;font-size:1.8rem;color:#fff;
+    border-radius:12px;padding:.3rem 1rem;letter-spacing:.02em}
 
   /* wordle */
   .wgrid{display:grid;grid-template-rows:repeat(6,1fr);gap:6px;margin:.4rem auto .6rem}
@@ -122,8 +125,20 @@ function arrival(s){
   app.innerHTML='';
   const c=el('div','center');
   const card=el('div','card');
-  card.innerHTML='<div class="place">Puzzle solved!</div>'
-    +'<div class="note">You know where this points. Head there \u2014 then tap below to check.</div>';
+  let keys=[];
+  if(s.type==='connections' && s.spotlight){
+    keys = s.spotlight.map(name=>{ const g=s.groups.find(x=>x.name===name);
+      return {text:name, color:(g?g.color:'#6B8E4E')}; });
+  } else if(s.type==='wordle'){
+    keys = [{text:s.answer, color:'#6B8E4E'}];
+  }
+  const keysHtml = keys.length
+    ? '<div class="keys">'+keys.map(k=>'<span class="keyword" style="background:'+k.color+'">'+k.text+'</span>').join('')+'</div>'
+    : '';
+  const lead = keys.length>1
+    ? 'Put these together \u2014 you know where to go.'
+    : 'You know where to go.';
+  card.innerHTML='<div class="step">Puzzle solved</div>'+keysHtml+'<div class="note">'+lead+'</div>';
   c.appendChild(card);
   const ask=el('button','big'); ask.textContent='Are we there yet?';
   const dist=el('div','dist');
