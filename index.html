@@ -98,7 +98,7 @@ function arrival(s){
     return {text:name,color}; }); }
   else if(s.type==='wordle'){ keys=[{text:s.answer,color:'#6B8E4E'}]; }
   const kh=keys.length?'<div class="keys">'+keys.map(k=>'<span class="keyword" style="background:'+k.color+'">'+k.text+'</span>').join('')+'</div>':'';
-  const lead=keys.length>1?'Put these together \u2014 you know where to go.':'You know where to go.';
+  const lead=keys.length>1?'Put these together \u2014 use the hint to figure out where to go and go there to collect your prize and get your next clue!':'Use the hint to figure out where to go and go there to collect your prize and get your next clue!';
   card.innerHTML='<div class="step">Puzzle solved</div>'+kh+'<div class="note">'+lead+'</div>';
   c.appendChild(card);
   const ask=el('button','big');ask.textContent='Are we there yet?';const dist=el('div','dist');
