@@ -73,6 +73,10 @@ function save(){try{localStorage.setItem('hunt-state',JSON.stringify(st));}catch
 function haversine(a,b,c,d){const R=6371000,r=x=>x*Math.PI/180;const dLat=r(c-a),dLon=r(d-b);
   const x=Math.sin(dLat/2)**2+Math.cos(r(a))*Math.cos(r(c))*Math.sin(dLon/2)**2;return 2*R*Math.asin(Math.sqrt(x));}
 function fmtDist(m){if(m<160)return Math.round(m)+' m away';const mi=m/1609.34;return (mi<10?mi.toFixed(1):Math.round(mi))+' mi away';}
+function bearing(a,b,c,d){const r=x=>x*Math.PI/180,dLon=r(d-b);
+  const y=Math.sin(dLon)*Math.cos(r(c)),x=Math.cos(r(a))*Math.sin(r(c))-Math.sin(r(a))*Math.cos(r(c))*Math.cos(dLon);
+  return (Math.atan2(y,x)*180/Math.PI+360)%360;}
+function compass(deg){return ['N','NE','E','SE','S','SW','W','NW'][Math.round(deg/45)%8];}
 function goTravel(s){st.phase='travel';save();arrival(s);}
 function goArrived(s){st.phase='arrived';save();instructions(s);}
 function goNext(){st.idx++;st.phase='puzzle';save();render();}
@@ -105,7 +109,7 @@ function arrival(s){
   ask.onclick=()=>{dist.textContent='Checking\u2026';
     if(!navigator.geolocation){dist.textContent='No location available \u2014 use the button below.';return;}
     navigator.geolocation.getCurrentPosition(p=>{const m=haversine(p.coords.latitude,p.coords.longitude,s.lat,s.lng);
-      if(m<=GAME.radius){goArrived(s);}else{dist.innerHTML='About '+fmtDist(m)+' \u2014 not yet. Keep going!'+(p.coords.accuracy>80?' <span class="warn">(weak signal)</span>':'');}},
+      if(m<=GAME.radius){goArrived(s);}else{const dir=compass(bearing(p.coords.latitude,p.coords.longitude,s.lat,s.lng));dist.innerHTML='About '+fmtDist(m)+' to the '+dir+' \u2014 not yet. Keep going!'+(p.coords.accuracy>80?' <span class="warn">(weak signal)</span>':'');}},
       ()=>{dist.textContent='Couldn\u2019t get a location. Try again outside, or use the button below.';},
       {enableHighAccuracy:true,timeout:12000,maximumAge:0});};
   c.appendChild(ask);c.appendChild(dist);
