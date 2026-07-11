@@ -1,4 +1,4 @@
-{ "name": "The Hunt", "short_name": "The Hunt", "start_url": ".", "scope": ".",
+{ "name": "Wordle", "short_name": "Wordle", "start_url": ".", "scope": ".",
   "display": "standalone", "orientation": "portrait",
   "background_color": "#FBF7EF", "theme_color": "#6B8E4E",
   "icons": [ { "src": "icon-192.png", "sizes": "192x192", "type": "image/png" },

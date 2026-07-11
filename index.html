@@ -2,11 +2,11 @@
 <html lang="en"><head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=1">
-<title>The Hunt</title>
+<title>Wordle</title>
 <link rel="manifest" href="manifest.webmanifest">
 <meta name="theme-color" content="#6B8E4E">
 <meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-title" content="The Hunt">
+<meta name="apple-mobile-web-app-title" content="Wordle">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,700;9..144,900&family=Nunito:wght@600;700;800&display=swap" rel="stylesheet">
@@ -16,23 +16,17 @@
   html,body{margin:0;min-height:100%;background:var(--paper);color:var(--ink);font-family:"Nunito",system-ui,sans-serif}
   body{display:flex;flex-direction:column;align-items:center;min-height:100dvh;
     padding:calc(.8rem + env(safe-area-inset-top)) 1rem calc(1rem + env(safe-area-inset-bottom));text-align:center}
-  .wrap{width:100%;max-width:460px;flex:1;display:flex;flex-direction:column}
-  h1{font-family:"Fraunces",serif;font-weight:900;margin:.2rem 0}
+  .wrap{width:100%;max-width:460px;flex:1;display:flex;flex-direction:column;align-items:center}
+  h1{font-family:"Fraunces",serif;font-weight:900;margin:.2rem 0;font-size:1.9rem}
   .step{font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;color:var(--leaf);font-weight:800;margin:.3rem 0 .1rem}
   .hint{font-size:.85rem;opacity:.75;margin:.1rem 0 .6rem}
   button{font-family:"Nunito";font-weight:800;cursor:pointer;border:none}
   .big{background:var(--leaf);color:var(--paper);border-radius:14px;padding:1rem 1.4rem;font-size:1.05rem;width:100%;max-width:22rem}
-  .big.ghost{background:#fff;color:var(--ink);border:1.5px solid var(--line)}
   .big:active{transform:scale(.98)}
-  .link{background:none;border:none;color:var(--leaf);font-weight:800;font-size:.8rem;text-decoration:underline;margin-top:.2rem;cursor:pointer;opacity:.75;max-width:20rem;line-height:1.4}
   .center{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.9rem}
   .card{background:#fff;border:1.5px solid var(--line);border-radius:18px;padding:1.4rem;width:100%}
   .place{font-family:"Fraunces",serif;font-weight:900;font-size:1.7rem;margin:.2rem 0 .5rem;color:var(--ink)}
   .note{font-size:1.08rem;line-height:1.5}
-  .dist{font-size:1rem;font-weight:800;min-height:1.3rem;color:var(--ink)}
-  .dist .warn{color:#B7791F}
-  .keys{display:flex;flex-wrap:wrap;gap:.5rem;justify-content:center;margin:.5rem 0 .7rem}
-  .keyword{font-family:"Fraunces",serif;font-weight:900;font-size:1.6rem;color:#fff;border-radius:12px;padding:.3rem 1rem}
   .wgrid{display:grid;grid-template-rows:repeat(6,1fr);gap:6px;margin:.4rem auto .6rem}
   .wrow{display:grid;gap:6px}
   .wt{aspect-ratio:1/1;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:1.5rem;border:2px solid var(--line);border-radius:8px;text-transform:uppercase;background:#fff;color:var(--ink)}
@@ -46,189 +40,62 @@
   .key.wide{max-width:54px;font-size:.72rem}
   .key.g{background:var(--green);color:#fff}.key.y{background:var(--yellow);color:#fff}.key.b{background:var(--grey);color:#fff}
   .key:active{transform:scale(.95)}
-  .cgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:7px;margin:.4rem 0}
-  .ct{aspect-ratio:1.25/1;display:flex;align-items:center;justify-content:center;text-align:center;background:#fff;border:1.5px solid var(--line);border-radius:10px;font-weight:800;font-size:.74rem;padding:2px;text-transform:uppercase}
-  .ct.sel{background:var(--ink);color:var(--paper);border-color:var(--ink)}.ct:active{transform:scale(.96)}
-  .solved{grid-column:1/-1;border-radius:10px;color:#fff;padding:.55rem;margin-bottom:1px}
-  .solved .cat{font-weight:900;font-size:.8rem;letter-spacing:.06em}.solved .ws{font-size:.74rem;opacity:.95;margin-top:1px}
-  .solved.spot{box-shadow:0 0 0 3px var(--ink);animation:glow 1.1s ease-in-out 2}@keyframes glow{50%{box-shadow:0 0 0 6px rgba(46,58,46,.35)}}
-  .cmsg{min-height:1.2rem;font-weight:800;font-size:.9rem;margin:.2rem 0}
-  .row{display:flex;gap:.6rem;width:100%;max-width:22rem}
-  .xclue{font-size:.9rem;font-weight:700;background:#fff;border:1.5px solid var(--line);border-radius:10px;padding:.55rem .7rem;margin:.2rem auto;max-width:22rem;line-height:1.35}
-  .xgrid{display:grid;gap:3px;margin:.45rem auto;}
-  .xcell{aspect-ratio:1/1;position:relative;background:#fff;border:1.5px solid var(--line);border-radius:4px;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:1.05rem;color:var(--ink);text-transform:uppercase}
-  .xcell .xnum{position:absolute;top:0;left:2px;font-size:.5rem;font-weight:700;color:#9a917c}
-  .xcell.selw{background:#EDE7D6}.xcell.selc{background:#C9DBB0;border-color:var(--leaf)}
 </style></head>
 <body><div class="wrap" id="app"></div>
 <script>
-const GAME = {"intro": "Happy birthday! Today is a little adventure, just for you. Each screen has a puzzle \u2014 solve it and it'll tell you where to go next. Head there, then tap \u201cAre we there yet?\u201d to check. Ready?", "stops": [{"id": "tabletop", "type": "wordle", "answer": "BOARD", "place": "TableTop Game & Hobby", "address": "9156 Metcalf Ave, Overland Park", "lat": 38.9620698, "lng": -94.6700458, "arrive": "Go in and ask for Cathy."}, {"id": "clay", "type": "connections", "groups": [{"name": "HOUSE", "color": "#6B8E4E", "words": ["BIRD", "DOLL", "FARM", "POOR"]}, {"name": "CLAY", "color": "#B5734A", "words": ["PIGEON", "BRICK", "COURT", "POT"]}, {"name": "BIRTHDAY", "color": "#5B7DB1", "words": ["CAKE", "CANDLES", "PRESENTS", "CARDS"]}, {"name": "DIRECTION RHYMES", "color": "#8A6BA8", "words": ["FOURTH", "MOUTH", "LEAST", "PEST"]}], "spotlight": ["HOUSE", "CLAY"], "place": "House of Clay", "address": "7811 Marty St, Overland Park", "lat": 38.9871967, "lng": -94.6697807, "arrive": "Sorry you missed your hand building class, but on Wednesday you and 2 of your family will join us here for your own private version!"}, {"id": "smp", "type": "crossword", "H": 11, "W": 8, "cells": [{"r": 1, "c": 1, "ch": "M", "n": 2}, {"r": 1, "c": 2, "ch": "I", "n": null}, {"r": 1, "c": 3, "ch": "S", "n": 3}, {"r": 1, "c": 4, "ch": "S", "n": null}, {"r": 1, "c": 5, "ch": "I", "n": 4}, {"r": 1, "c": 6, "ch": "O", "n": 5}, {"r": 1, "c": 7, "ch": "N", "n": 6}, {"r": 2, "c": 1, "ch": "I", "n": null}, {"r": 3, "c": 1, "ch": "S", "n": 9}, {"r": 4, "c": 1, "ch": "C", "n": null}, {"r": 5, "c": 1, "ch": "H", "n": null}, {"r": 6, "c": 1, "ch": "I", "n": null}, {"r": 7, "c": 1, "ch": "E", "n": null}, {"r": 8, "c": 1, "ch": "F", "n": 14}, {"r": 3, "c": 2, "ch": "H", "n": null}, {"r": 3, "c": 3, "ch": "A", "n": null}, {"r": 3, "c": 4, "ch": "W", "n": 10}, {"r": 3, "c": 5, "ch": "N", "n": null}, {"r": 3, "c": 6, "ch": "E", "n": null}, {"r": 3, "c": 7, "ch": "E", "n": null}, {"r": 6, "c": 0, "ch": "B", "n": 12}, {"r": 6, "c": 2, "ch": "R", "n": null}, {"r": 6, "c": 3, "ch": "T", "n": 13}, {"r": 6, "c": 4, "ch": "H", "n": null}, {"r": 6, "c": 5, "ch": "D", "n": null}, {"r": 6, "c": 6, "ch": "A", "n": null}, {"r": 6, "c": 7, "ch": "Y", "n": null}, {"r": 5, "c": 6, "ch": "M", "n": 11}, {"r": 7, "c": 6, "ch": "Y", "n": null}, {"r": 8, "c": 6, "ch": "H", "n": null}, {"r": 9, "c": 6, "ch": "E", "n": null}, {"r": 10, "c": 6, "ch": "M", "n": null}, {"r": 7, "c": 3, "ch": "R", "n": null}, {"r": 8, "c": 3, "ch": "A", "n": null}, {"r": 9, "c": 3, "ch": "I", "n": null}, {"r": 10, "c": 3, "ch": "L", "n": null}, {"r": 2, "c": 3, "ch": "E", "n": null}, {"r": 2, "c": 5, "ch": "O", "n": 8}, {"r": 0, "c": 2, "ch": "R", "n": 1}, {"r": 2, "c": 2, "ch": "C", "n": null}, {"r": 2, "c": 0, "ch": "N", "n": 7}, {"r": 2, "c": 7, "ch": "E", "n": null}, {"r": 4, "c": 7, "ch": "D", "n": null}, {"r": 2, "c": 6, "ch": "N", "n": null}, {"r": 8, "c": 2, "ch": "L", "n": null}, {"r": 8, "c": 4, "ch": "T", "n": null}, {"r": 4, "c": 4, "ch": "I", "n": null}, {"r": 5, "c": 4, "ch": "S", "n": null}, {"r": 10, "c": 2, "ch": "C", "n": 15}, {"r": 10, "c": 4, "ch": "A", "n": null}, {"r": 10, "c": 5, "ch": "I", "n": null}], "acrossClues": {"2": "As in \"man on a ___\"", "7": "Pleasant; or a French Riviera city", "8": "The loneliest number", "9": "A local Native American tribe", "12": "A special day for someone", "14": "Out of air, like a tire", "15": "Stake a ___; assert as true"}, "downClues": {"1": "Loaded, money-wise", "2": "What you manage when you\u2019re done with the Marauder\u2019s Map", "3": "The Mediterranean, for one", "4": "Charged particle", "5": "___-way street", "6": "Require", "10": "What you make over the candles", "11": "Chaos in the fifth month of the year", "13": "Oregon, for one"}, "spotlight": ["SHAWNEE", "MISSION", "TRAIL", "MISCHIEF", "MAYHEM"], "trailWords": ["MISCHIEF", "MAYHEM"], "place": "Shawnee Mission Park", "address": "Shawnee Mission Park, Shawnee", "lat": 38.985710947794445, "lng": -94.80910111251332, "arrive": "Open the <a href='https://jouyun.github.io/animal_bingo/' target='_blank' rel='noopener' style='color:var(--leaf);font-weight:800'>bingo app</a> and walk the Mischief and Mayhem trails."}, {"id": "depot", "type": "wordle", "answer": "DEPOT", "hint": "(in Merriam)", "place": "The Home Depot \u2013 Merriam", "address": "5700 Antioch Rd, Merriam", "lat": 39.0260432, "lng": -94.6894479, "arrive": "Head to the pickup desk, there's something waiting for you."}, {"id": "boulevard", "type": "wordle", "answer": "YEAST", "hint": "(it is NOT about bread)", "place": "Boulevard Brewing", "address": "2534 Madison Ave, Kansas City", "lat": 39.0811973, "lng": -94.5954236, "arrive": "Find your mom and enjoy the tour together!"}, {"id": "lidias", "type": "wordle", "answer": "PASTA", "final": true, "place": "Lidia's", "address": "101 W 22nd St, Kansas City", "lat": 39.0877163, "lng": -94.5847287, "arrive": "Your table is waiting \u2014 the pasta trio, of course. Happy birthday. I love you. \u2764"}], "radius": 50};
-const params = new URLSearchParams(location.search);
-const HOST = params.has('host');
-if(params.has('reset')){ try{localStorage.removeItem('hunt-state');}catch(e){} }
+const WORDS=["SNOWY","MESSI","JOYCE","WORLD","FRIES","BALLS","YAMAL","GOALS"];
+const params=new URLSearchParams(location.search);
+if(params.has('reset')){try{localStorage.removeItem('wordle-state');}catch(e){}}
 const app=document.getElementById('app');
 let st=load();
-function load(){try{return JSON.parse(localStorage.getItem('hunt-state'))||{idx:-1,phase:'puzzle'};}catch(e){return {idx:-1,phase:'puzzle'};}}
-function save(){try{localStorage.setItem('hunt-state',JSON.stringify(st));}catch(e){}}
-function haversine(a,b,c,d){const R=6371000,r=x=>x*Math.PI/180;const dLat=r(c-a),dLon=r(d-b);
-  const x=Math.sin(dLat/2)**2+Math.cos(r(a))*Math.cos(r(c))*Math.sin(dLon/2)**2;return 2*R*Math.asin(Math.sqrt(x));}
-function fmtDist(m){if(m<160)return Math.round(m)+' m away';const mi=m/1609.34;return (mi<10?mi.toFixed(1):Math.round(mi))+' mi away';}
-function bearing(a,b,c,d){const r=x=>x*Math.PI/180,dLon=r(d-b);
-  const y=Math.sin(dLon)*Math.cos(r(c)),x=Math.cos(r(a))*Math.sin(r(c))-Math.sin(r(a))*Math.cos(r(c))*Math.cos(dLon);
-  return (Math.atan2(y,x)*180/Math.PI+360)%360;}
-function compass(deg){return ['N','NE','E','SE','S','SW','W','NW'][Math.round(deg/45)%8];}
-function goTravel(s){st.phase='travel';save();arrival(s);}
-function goArrived(s){st.phase='arrived';save();instructions(s);}
-function goNext(){st.idx++;st.phase='puzzle';save();render();}
+function load(){try{return JSON.parse(localStorage.getItem('wordle-state'))||{idx:0};}catch(e){return {idx:0};}}
+function save(){try{localStorage.setItem('wordle-state',JSON.stringify(st));}catch(e){}}
+function el(t,c){const e=document.createElement(t);if(c)e.className=c;return e;}
 function render(){
-  if(st.idx<0){intro();return;}
-  const s=GAME.stops[st.idx];
-  if(st.phase==='travel') arrival(s);
-  else if(st.phase==='arrived') instructions(s);
-  else if(s.type==='wordle') wordle(s);
-  else if(s.type==='connections') connections(s);
-  else if(s.type==='crossword') crossword(s);
+  if(st.idx>=WORDS.length){done();return;}
+  wordle(WORDS[st.idx].toUpperCase());
 }
-function intro(){app.innerHTML='';const c=el('div','center');
-  c.innerHTML='<div class="card"><div class="place">A little adventure</div><div class="note">'+GAME.intro+'</div></div>';
-  const b=el('button','big');b.textContent='Begin';b.onclick=()=>{st.idx=0;st.phase='puzzle';save();render();};
-  c.appendChild(b);app.appendChild(c);}
-function arrival(s){
-  app.innerHTML='';const c=el('div','center');const card=el('div','card');
-  let keys=[];
-  if(s.spotlight){ keys=s.spotlight.map(name=>{ let color='#6B8E4E';
-    if(s.groups){const g=s.groups.find(x=>x.name===name); if(g)color=g.color;}
-    if(s.trailWords && s.trailWords.indexOf(name)>=0) color='#C0473B';
-    return {text:name,color}; }); }
-  else if(s.type==='wordle'){ keys=[{text:s.answer,color:'#6B8E4E'}]; }
-  const kh=keys.length?'<div class="keys">'+keys.map(k=>'<span class="keyword" style="background:'+k.color+'">'+k.text+'</span>').join('')+'</div>':'';
-  const lead=keys.length>1?'Put these together \u2014 use the hint to figure out where to go and go there to collect your prize and get your next clue!':'Use the hint to figure out where to go and go there to collect your prize and get your next clue!';
-  card.innerHTML='<div class="step">Puzzle solved</div>'+kh+'<div class="note">'+lead+'</div>'+(s.hint?'<div class="note" style="margin-top:.4rem;font-style:italic;opacity:.85">'+s.hint+'</div>':'');
-  c.appendChild(card);
-  const ask=el('button','big');ask.textContent='Are we there yet?';const dist=el('div','dist');
-  ask.onclick=()=>{dist.textContent='Checking\u2026';
-    if(!navigator.geolocation){dist.textContent='No location available \u2014 use the button below.';return;}
-    navigator.geolocation.getCurrentPosition(p=>{const m=haversine(p.coords.latitude,p.coords.longitude,s.lat,s.lng);
-      if(m<=GAME.radius){goArrived(s);}else{const dir=compass(bearing(p.coords.latitude,p.coords.longitude,s.lat,s.lng));dist.innerHTML='About '+fmtDist(m)+' to the '+dir+' \u2014 not yet. Keep going!'+(p.coords.accuracy>80?' <span class="warn">(weak signal)</span>':'');}},
-      ()=>{dist.textContent='Couldn\u2019t get a location. Try again outside, or use the button below.';},
-      {enableHighAccuracy:true,timeout:12000,maximumAge:0});};
-  c.appendChild(ask);c.appendChild(dist);
-  const over=el('button','link');over.textContent="I\u2019m here \u2014 I know I\u2019m in the right place";over.onclick=()=>goArrived(s);
-  c.appendChild(over);app.appendChild(c);if(HOST)addHostBar();
+function done(){
+  handleKey=()=>{};app.innerHTML='';const c=el('div','center');
+  c.innerHTML='<div class="card"><div class="place">You did it! 🎉</div><div class="note">You solved all '+WORDS.length+' words.</div></div>';
+  const b=el('button','big');b.textContent='Play again';b.onclick=()=>{st={idx:0};save();render();};
+  c.appendChild(b);app.appendChild(c);
 }
-function instructions(s){
-  app.innerHTML='';const c=el('div','center');const card=el('div','card');
-  card.innerHTML='<div class="step">You made it</div><div class="place">'+s.place+'</div><div class="note">'+s.arrive+'</div><div style="font-size:.82rem;opacity:.55;margin-top:.5rem">'+s.address+'</div>';
-  c.appendChild(card);
-  if(s.final){const d=el('div','note');d.style.opacity='.7';d.textContent='\u2014 the end \u2014';c.appendChild(d);}
-  else{const nx=el('button','big');nx.style.maxWidth='22rem';nx.textContent='On to the next puzzle';nx.onclick=goNext;c.appendChild(nx);}
-  app.appendChild(c);if(HOST)addHostBar();
-}
-/* WORDLE */
-function wordle(s){
-  const answer=s.answer.toUpperCase();const N=answer.length;let row=0,cur='';
-  app.innerHTML='';app.appendChild(stepLabel());
+function next(){st.idx++;save();render();}
+function wordle(answer){
+  const N=answer.length;let row=0,cur='',finished=false;
+  app.innerHTML='';
+  const step=el('div','step');step.textContent='Word '+(st.idx+1)+' of '+WORDS.length;app.appendChild(step);
   const h=el('div','hint');h.textContent=N+' letters';app.appendChild(h);
   const grid=el('div','wgrid');grid.style.width='min(86vw,'+(N*62)+'px)';const rows=[];
   for(let r=0;r<6;r++){const rr=el('div','wrow');rr.style.gridTemplateColumns='repeat('+N+',1fr)';const cs=[];
     for(let i=0;i<N;i++){const t=el('div','wt');rr.appendChild(t);cs.push(t);}rows.push(cs);grid.appendChild(rr);}
-  app.appendChild(grid);const kb=buildKeyboard(onKey);app.appendChild(kb.node);
+  app.appendChild(grid);const kb=buildKeyboard(onKey);app.appendChild(kb.node);handleKey=onKey;
   function draw(){for(let i=0;i<N;i++){const t=rows[row][i];t.textContent=cur[i]||'';t.classList.toggle('filled',!!cur[i]);}}
-  function onKey(k){if(k==='ENTER'){submit();return;}if(k==='DEL'){cur=cur.slice(0,-1);draw();return;}
+  function onKey(k){if(finished)return;if(k==='ENTER'){submit();return;}if(k==='DEL'){cur=cur.slice(0,-1);draw();return;}
     if(cur.length<N&&/^[A-Z]$/.test(k)){cur+=k;draw();const t=rows[row][cur.length-1];t.classList.add('pop');setTimeout(()=>t.classList.remove('pop'),120);}}
   function score(g){const res=Array(N).fill('b');const cnt={};for(const ch of answer)cnt[ch]=(cnt[ch]||0)+1;
     for(let i=0;i<N;i++)if(g[i]===answer[i]){res[i]='g';cnt[g[i]]--;}
     for(let i=0;i<N;i++){if(res[i]==='g')continue;if(cnt[g[i]]>0){res[i]='y';cnt[g[i]]--;}}return res;}
   function submit(){if(cur.length<N){rows[row][0].parentNode.classList.add('shake');setTimeout(()=>rows[row][0].parentNode.classList.remove('shake'),400);return;}
     const g=cur,res=score(g);for(let i=0;i<N;i++){rows[row][i].classList.add(res[i]);kb.color(g[i],res[i]);}
-    if(g===answer){setTimeout(()=>goTravel(s),500);return;}row++;cur='';
-    if(row>=6){const h2=el('div','hint');h2.innerHTML='The word was <b>'+answer+'</b>.';app.insertBefore(h2,grid.nextSibling);setTimeout(()=>goTravel(s),1400);}}
-  if(HOST)addHostBar();
+    if(g===answer){finished=true;setTimeout(next,900);return;}row++;cur='';
+    if(row>=6){finished=true;const h2=el('div','hint');h2.innerHTML='The word was <b>'+answer+'</b>.';app.insertBefore(h2,grid.nextSibling);setTimeout(next,1600);}}
 }
 function buildKeyboard(handler){
   const rowsDef=[[...'QWERTYUIOP'],[...'ASDFGHJKL'],['ENTER',...'ZXCVBNM','DEL']];const node=el('div','kb');const keyEls={};
   rowsDef.forEach(tokens=>{const r=el('div','krow');tokens.forEach(tok=>{const k=el('button','key'+((tok==='ENTER'||tok==='DEL')?' wide':''));
-    k.textContent=tok==='DEL'?'\u232b':tok;k.onclick=()=>handler(tok);if(tok.length===1)keyEls[tok]=k;r.appendChild(k);});node.appendChild(r);});
+    k.textContent=tok==='DEL'?'⌫':tok;k.onclick=()=>handler(tok);if(tok.length===1)keyEls[tok]=k;r.appendChild(k);});node.appendChild(r);});
   function color(ch,res){const k=keyEls[ch];if(!k)return;if(k.classList.contains('g'))return;
     if(res==='g'){k.classList.remove('y','b');k.classList.add('g');}
     else if(res==='y'&&!k.classList.contains('g')){k.classList.remove('b');k.classList.add('y');}
     else if(res==='b'&&!k.classList.contains('g')&&!k.classList.contains('y')){k.classList.add('b');}}
   return {node,color};
 }
-/* CONNECTIONS */
-function connections(s){
-  app.innerHTML='';app.appendChild(stepLabel());const h=el('div','hint');h.textContent='Make four groups of four';app.appendChild(h);
-  const solvedWrap=el('div');app.appendChild(solvedWrap);const grid=el('div','cgrid');app.appendChild(grid);
-  const msg=el('div','cmsg');app.appendChild(msg);const row=el('div','row');row.style.maxWidth='22rem';
-  const sub=el('button','big');sub.textContent='Submit';sub.disabled=true;sub.style.opacity=.5;
-  const clr=el('button','big ghost');clr.textContent='Clear';row.appendChild(clr);row.appendChild(sub);app.appendChild(row);
-  let words=[];s.groups.forEach(g=>g.words.forEach(w=>words.push({w,g})));words=shuffle(words);
-  let selected=new Set(),solved=[];
-  function paint(){grid.innerHTML='';words.forEach(o=>{const t=el('div','ct');t.textContent=o.w;if(selected.has(o.w))t.classList.add('sel');
-    t.onclick=()=>{if(selected.has(o.w))selected.delete(o.w);else if(selected.size<4)selected.add(o.w);paint();};grid.appendChild(t);});
-    sub.disabled=selected.size!==4;sub.style.opacity=selected.size===4?1:.5;}
-  function drawSolved(){solvedWrap.innerHTML='';solved.forEach(g=>{const d=el('div','solved');d.style.background=g.color;
-    if(s.spotlight&&s.spotlight.indexOf(g.name)>=0)d.classList.add('spot');
-    d.innerHTML='<div class="cat">'+g.name+'</div><div class="ws">'+g.words.join('  \u00b7  ')+'</div>';solvedWrap.appendChild(d);});}
-  clr.onclick=()=>{selected.clear();paint();};
-  sub.onclick=()=>{const sel=[...selected];const hit=s.groups.find(g=>sel.every(w=>g.words.includes(w))&&!solved.includes(g));
-    if(hit){solved.push(hit);words=words.filter(o=>!hit.words.includes(o.w));selected.clear();msg.textContent='';drawSolved();paint();
-      if(solved.length===s.groups.length){setTimeout(()=>goTravel(s),900);}}
-    else{let near=false;for(const g of s.groups){if(solved.includes(g))continue;if(sel.filter(w=>g.words.includes(w)).length===3)near=true;}
-      msg.textContent=near?'So close \u2014 one away!':'Not quite \u2014 try again.';grid.classList.add('shake');setTimeout(()=>grid.classList.remove('shake'),400);}};
-  paint();if(HOST)addHostBar();
-}
-/* CROSSWORD */
-function crossword(s){
-  app.innerHTML='';app.appendChild(stepLabel());
-  const H=s.H,W=s.W,sol={},num={};
-  s.cells.forEach(c=>{sol[c.r+','+c.c]=c.ch;if(c.n)num[c.r+','+c.c]=c.n;});
-  const isc=(r,c)=>(r+','+c) in sol;
-  const across=[],down=[];
-  for(let r=0;r<H;r++){let c=0;while(c<W){if(isc(r,c)){let stt=c;while(isc(r,c))c++;if(c-stt>=2){const cells=[];for(let k=stt;k<c;k++)cells.push([r,k]);across.push({n:num[r+','+stt],dir:'A',cells,clue:s.acrossClues[num[r+','+stt]]});}}else c++;}}
-  for(let c=0;c<W;c++){let r=0;while(r<H){if(isc(r,c)){let stt=r;while(isc(r,c))r++;if(r-stt>=2){const cells=[];for(let k=stt;k<r;k++)cells.push([k,c]);down.push({n:num[stt+','+c],dir:'D',cells,clue:s.downClues[num[stt+','+c]]});}}else r++;}}
-  const all=across.concat(down);const ce={};
-  across.forEach(e=>e.cells.forEach(([r,c])=>{(ce[r+','+c]=ce[r+','+c]||{}).A=e;}));
-  down.forEach(e=>e.cells.forEach(([r,c])=>{(ce[r+','+c]=ce[r+','+c]||{}).D=e;}));
-  const guess={};let sel=null,dir='A';
-  const clueBar=el('div','xclue');app.appendChild(clueBar);
-  const grid=el('div','xgrid');grid.style.gridTemplateColumns='repeat('+W+',1fr)';grid.style.maxWidth=(W*40)+'px';grid.style.width='100%';
-  const els={};
-  for(let r=0;r<H;r++)for(let c=0;c<W;c++){const d=el('div');
-    if(!isc(r,c)){d.style.aspectRatio='1/1';}
-    else{d.className='xcell';if(num[r+','+c]){const sp=el('span','xnum');sp.textContent=num[r+','+c];d.appendChild(sp);}
-      const lt=el('span');d.appendChild(lt);els[r+','+c]={el:d,lt};d.onclick=()=>pick(r,c);}
-    grid.appendChild(d);}
-  app.appendChild(grid);
-  const kb=el('div','kb');[[...'QWERTYUIOP'],[...'ASDFGHJKL'],[...'ZXCVBNM','DEL']].forEach(toks=>{const rr=el('div','krow');
-    toks.forEach(tok=>{const k=el('button','key'+(tok==='DEL'?' wide':''));k.textContent=tok==='DEL'?'\u232b':tok;k.onclick=()=>onKey(tok);rr.appendChild(k);});kb.appendChild(rr);});
-  app.appendChild(kb);
-  const hintBtn=el('button','link');hintBtn.textContent='Stuck? Reveal this word';
-  hintBtn.onclick=()=>{const e=cur();if(!e)return;e.cells.forEach(([r,c])=>guess[r+','+c]=sol[r+','+c]);paint();done();};
-  app.appendChild(hintBtn);
-  function cur(){if(!sel)return null;const o=ce[sel[0]+','+sel[1]];return o[dir]||o.A||o.D;}
-  function pick(r,c){if(sel&&sel[0]===r&&sel[1]===c){const o=ce[r+','+c];if(o.A&&o.D)dir=(dir==='A'?'D':'A');}
-    else{sel=[r,c];const o=ce[r+','+c];if(!o[dir])dir=o.A?'A':'D';}paint();}
-  function nextCell(){const e=cur();if(!e)return;const i=e.cells.findIndex(([r,c])=>r===sel[0]&&c===sel[1]);if(i<e.cells.length-1)sel=e.cells[i+1].slice();}
-  function prevCell(){const e=cur();if(!e)return;const i=e.cells.findIndex(([r,c])=>r===sel[0]&&c===sel[1]);if(i>0)sel=e.cells[i-1].slice();}
-  function onKey(k){if(!sel){sel=all[0].cells[0].slice();dir=all[0].dir;}
-    if(k==='DEL'){if(guess[sel[0]+','+sel[1]])guess[sel[0]+','+sel[1]]='';else{prevCell();guess[sel[0]+','+sel[1]]='';}paint();return;}
-    if(/^[A-Z]$/.test(k)){guess[sel[0]+','+sel[1]]=k;nextCell();paint();done();}}
-  function paint(){Object.keys(els).forEach(k=>{els[k].lt.textContent=guess[k]||'';els[k].el.classList.remove('selc','selw');});
-    const e=cur();if(e)e.cells.forEach(([r,c])=>els[r+','+c].el.classList.add('selw'));
-    if(sel)els[sel[0]+','+sel[1]].el.classList.add('selc');
-    clueBar.innerHTML=e?('<b>'+e.n+(e.dir==='A'?' Across':' Down')+'</b> &middot; '+e.clue):'Tap a square to begin';}
-  function done(){for(const k in sol){if((guess[k]||'')!==sol[k])return;}setTimeout(()=>goTravel(s),500);}
-  sel=all[0].cells[0].slice();dir='A';paint();
-  if(HOST)addHostBar();
-}
-/* helpers */
-function el(t,c){const e=document.createElement(t);if(c)e.className=c;return e;}
-function stepLabel(){const d=el('div','step');d.textContent='Stop '+(st.idx+1)+' of '+GAME.stops.length;return d;}
-function shuffle(a){a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
-function addHostBar(){if(document.getElementById('hb'))return;const b=el('button');b.id='hb';b.textContent='skip \u25b8';
-  b.style.cssText='position:fixed;bottom:6px;right:6px;font-size:.7rem;opacity:.4;background:#0000;color:#2E3A2E;border:1px solid #ccc;border-radius:6px;padding:2px 6px;z-index:99';
-  b.onclick=goNext;document.body.appendChild(b);}
+document.addEventListener('keydown',e=>{const k=e.key;
+  if(k==='Enter')handleKey('ENTER');else if(k==='Backspace')handleKey('DEL');
+  else if(/^[a-zA-Z]$/.test(k))handleKey(k.toUpperCase());});
+let handleKey=()=>{};
 if('serviceWorker' in navigator){try{navigator.serviceWorker.register('sw.js');}catch(e){}}
 render();
 </script></body></html>
